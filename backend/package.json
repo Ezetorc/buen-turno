@@ -1,10 +1,15 @@
 {
   "name": "backend",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Backend for Buen Turno application - a platform for managing appointments and services",
+  "author": "Ezetorc",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
+  "homepage": "https://github.com/ezetorc/buen-turno#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ezetorc/buen-turno.git"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -23,6 +28,8 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "dotenv": "^17.2.3",
+    "prisma": "^7.0.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  phone     String   @unique
+  role      UserRole @default(CLIENT)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  appointments Appointment[] @relation("ClientAppointments")
+  businesses   Business[]    @relation("BusinessOwner")
+
+  @@map("users")
+}
+
+model Business {
+  id          String        @id @default(cuid())
+  ownerId     String        @map("owner_id")
+  name        String
+  address     String        @unique
+  phone       String        @unique
+  slug        String        @unique
+  timezone    String
+  image       String
+  email       String        @unique
+  description String
+  country     String
+  theme       BusinessTheme @default(LIGHT)
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  owner         User               @relation("BusinessOwner", fields: [ownerId], references: [id])
+  services      Service[]
+  professionals Professional[]
+  schedules     BusinessSchedule[]
+  appointments  Appointment[]
+
+  @@map("businesses")
+}
+
+model Service {
+  id              String        @id @default(cuid())
+  businessId      String        @map("business_id")
+  image           String
+  name            String
+  durationMinutes Int           @map("duration_minutes")
+  description     String
+  price           Float?
+  color           ServiceColor?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  business      Business              @relation(fields: [businessId], references: [id])
+  professionals ProfessionalService[]
+  appointments  Appointment[]
+
+  @@map("services")
+}
+
+model Professional {
+  id         String @id @default(cuid())
+  image      String
+  businessId String @map("business_id")
+  name       String
+
+  business     Business               @relation(fields: [businessId], references: [id])
+  services     ProfessionalService[]
+  schedules    ProfessionalSchedule[]
+  blockedSlots BlockedSlot[]
+  appointments Appointment[]
+
+  @@map("professionals")
+}
+
+model ProfessionalService {
+  id             String @id @default(cuid())
+  professionalId String @map("professional_id")
+  serviceId      String @map("service_id")
+
+  professional Professional @relation(fields: [professionalId], references: [id])
+  service      Service      @relation(fields: [serviceId], references: [id])
+
+  @@unique([professionalId, serviceId])
+  @@map("professional_services")
+}
+
+model ProfessionalSchedule {
+  id             String    @id @default(cuid())
+  professionalId String    @map("professional_id")
+  dayOfWeek      DayOfWeek @map("day_of_week")
+  startTime      DateTime  @map("start_time")
+  endTime        DateTime  @map("end_time")
+
+  professional Professional @relation(fields: [professionalId], references: [id])
+
+  @@unique([professionalId, dayOfWeek])
+  @@map("professional_schedules")
+}
+
+model BusinessSchedule {
+  id         String    @id @default(cuid())
+  businessId String    @map("business_id")
+  dayOfWeek  DayOfWeek @map("day_of_week")
+  startTime  DateTime  @map("start_time")
+  endTime    DateTime  @map("end_time")
+  isClosed   Boolean   @default(false) @map("is_closed")
+
+  business Business @relation(fields: [businessId], references: [id])
+
+  @@unique([businessId, dayOfWeek])
+  @@map("business_schedules")
+}
+
+model BlockedSlot {
+  id             String   @id @default(cuid())
+  professionalId String   @map("professional_id")
+  date           DateTime @map("date")
+  startTime      DateTime @map("start_time")
+  endTime        DateTime @map("end_time")
+
+  professional Professional @relation(fields: [professionalId], references: [id])
+
+  @@map("blocked_slots")
+}
+
+model Appointment {
+  id             String            @id @default(cuid())
+  businessId     String            @map("business_id")
+  clientId       String            @map("client_id")
+  professionalId String            @map("professional_id")
+  serviceId      String            @map("service_id")
+  date           DateTime          @map("date")
+  startTime      DateTime          @map("start_time")
+  endTime        DateTime          @map("end_time")
+  status         AppointmentStatus @default(PENDING) @map("status")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+
+  business     Business     @relation(fields: [businessId], references: [id])
+  client       User         @relation("ClientAppointments", fields: [clientId], references: [id])
+  professional Professional @relation(fields: [professionalId], references: [id])
+  service      Service      @relation(fields: [serviceId], references: [id])
+
+  @@index([businessId])
+  @@index([clientId])
+  @@index([professionalId])
+  @@index([serviceId])
+  @@map("appointments")
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+enum BusinessTheme {
+  LIGHT
+  DARK
+}
+
+enum ServiceColor {
+  RED
+  ORANGE
+  YELLOW
+  GREEN
+  BLUE
+  INDIGO
+  PURPLE
+}
