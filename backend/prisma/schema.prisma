@@ -1,7 +1,7 @@
 generator client {
-  provider        = "prisma-client"
-  output          = "../generated/prisma"
-  moduleFormat    = "cjs"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -31,11 +31,11 @@ model Business {
   address     String        @unique @db.VarChar(255)
   phone       String        @unique @db.VarChar(40)
   slug        String        @unique @db.VarChar(100)
-  timezone    String
-  image       String
+  timezone    String        @db.VarChar(40)
+  image       String        @db.VarChar(255)
   email       String        @unique @db.VarChar(100)
-  description String
-  country     String
+  description String        @db.VarChar(255)
+  country     String        @db.VarChar(40)
   theme       BusinessTheme @default(LIGHT)
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
@@ -55,7 +55,7 @@ model Service {
   image           String        @db.VarChar(255)
   name            String        @db.VarChar(40)
   durationMinutes Int           @map("duration_minutes")
-  description     String
+  description     String        @db.VarChar(255)
   price           Float?
   color           ServiceColor?
   createdAt       DateTime      @default(now()) @map("created_at")

@@ -8,4 +8,5 @@ export const getEnvConfiguration = () => ({
     url: ENV.DATABASE_URL,
     port: parseInt(ENV.DATABASE_PORT || '5432', 10),
   },
+  jwtSecret: ENV.JWT_SECRET,
 })

@@ -13,4 +13,8 @@ export class UsersRepository {
   async create(data: Prisma.UserCreateInput) {
     return await this.prismaService.user.create({ data })
   }
+
+  async findByPhone(phone: string) {
+    return await this.prismaService.user.findUnique({ where: { phone } })
+  }
 }
