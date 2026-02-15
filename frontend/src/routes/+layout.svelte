@@ -5,5 +5,9 @@
 	let { children } = $props();
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+	<title>BuenTurno | Gestioná turnos de una manera eficiente</title>
+</svelte:head>
+
 {@render children()}
