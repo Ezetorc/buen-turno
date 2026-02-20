@@ -1,56 +1,37 @@
 <script lang="ts">
-  import AppearenceStep from "$lib/components/new-business-form/AppearenceStep.svelte"
-	import WelcomeStep from "$lib/components/new-business-form/WelcomeStep.svelte";
-	import YourBusinessStep from "$lib/components/new-business-form/YourBusinessStep.svelte";
-	import type { Business } from "$lib/schemas/Business";
-	import type { BusinessStepInput } from "$lib/schemas/BusinessStep";
-	import type { ZodFormattedError } from "zod/v3";
+	import AppareanceStep from '$lib/components/new-business-form/AppareanceStep.svelte';
+	import WelcomeStep from '$lib/components/new-business-form/WelcomeStep.svelte';
+	import YourBusinessStep from '$lib/components/new-business-form/YourBusinessStep.svelte';
+	import type { Business } from '$lib/types/Business';
 
-  let step = $state(0)
-  let data: Partial<Business> = $state({ })
-  let errors: ZodFormattedError<BusinessStepInput> | null = $state(null);
+	let step: number = $state(2);
+	let data: Partial<Business> = $state({
+		theme: "barber"
+	});
 
-  function onDataChange(newData: BusinessStepInput) {
-    data = { ...data, ...newData }
-  }
+	function setData(newData: Partial<Business>) {
+		data = { ...data, ...newData };
+	}
 
-  function onNext(requiredFields?: Array<keyof BusinessStepInput>) {
-    if (requiredFields === undefined) {
-      step += 1
-      return
-    }
+	function goNext() {
+		step += 1
+	}
 
-    const missing = requiredFields.filter(
-      field => !data[field]
-    );
-
-    if (missing.length > 0) {
-      console.warn("Campos faltantes:", missing);
-      return;
-    }
-
-    step += 1;
-  }
-
-  function onBack() {
+  function goBack() {
     step -= 1
   }
 </script>
 
-<div class="grid grid-rows-[auto_1fr] min-h-screen">
-  <header class="flex items-center px-6 border-b h-16">
-    {#if step === 0}
-      BuenTurno
-    {:else}
-      {step}
-    {/if}
-  </header>
+<header class="sticky top-0 z-40 flex h-16 items-center border-b bg-white px-6">BuenTurno</header>
 
-  {#if step === 0}
-    <WelcomeStep {data} {onNext} {onBack} {onDataChange} />
-  {:else if step === 1}
-    <YourBusinessStep {data} {onNext} {onBack} {onDataChange} />
-  {:else if step === 2}
-    <AppearenceStep {data} {onNext} {onBack} {onDataChange} />
-  {/if}
-</div>
+<main class="grid w-full grid-rows-[auto_1fr] gap-y-4">
+	<div class="mx-auto w-full max-w-[600px] min-w-[300px] px-5">
+		{#if step === 0}
+			<WelcomeStep {goNext} />
+		{:else if step === 1}
+			<YourBusinessStep {goNext} {data} {setData} />
+		{:else if step === 2}
+			<AppareanceStep {goNext} {goBack} {data} {setData} />
+		{/if}
+	</div>
+</main>

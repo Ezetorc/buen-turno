@@ -1,47 +1,52 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme inline {
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-accent: #22C55E;
+	--color-primary: #2563eb;
+	--color-primary-hover: #1d4ed8;
+	--color-accent: #22c55e;
 
-  --color-background: #F9FAFB;
-  --color-surface: #FFFFFF;
+	--color-background: #f9fafb;
+	--color-surface: #ffffff;
 
-  --color-text-primary: #111827;
-  --color-text-secondary: #4B5563;
-  --color-text-muted: #9CA3AF;
+	--color-text-primary: #111827;
+	--color-text-secondary: #4b5563;
+	--color-text-muted: #9ca3af;
 
-  --color-border: #E5E7EB;
+	--color-border: #e5e7eb;
 
-  --color-success: #16A34A;
-  --color-error: #DC2626;
-  --color-warning: #F59E0B;
-  --color-info: #2563EB;
+	--color-success: #16a34a;
+	--color-error: #dc2626;
+	--color-warning: #f59e0b;
+	--color-info: #2563eb;
 
-  --font-sans: 'Poppins', system-ui, sans-serif;
+	--font-sans: 'Poppins', system-ui, sans-serif;
+
+	--breakpoint-mini: 320px;
+	--breakpoint-mobile: 400px;
+	--breakpoint-tablet: 840px;
+	--breakpoint-desktop: 1280px;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins-Light.woff2') format('woff2');
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins-Regular.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
+	font-family: 'Poppins';
+	src: url('/fonts/Poppins-Bold.woff2') format('woff2');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
 }

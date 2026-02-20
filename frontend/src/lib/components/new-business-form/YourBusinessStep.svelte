@@ -1,30 +1,112 @@
 <script lang="ts">
-	import Button from "$lib/components/Button.svelte";
-	import Input from "$lib/components/Input.svelte";
-	import Textarea from "$lib/components/Textarea.svelte";
-	import type { Business } from "$lib/schemas/Business";
-	import type { BusinessStepProps } from "$lib/types/BusinessStepProps";
+	import { useForm } from '$lib/hooks/useForm';
+	import { YourBusinessStepSchema } from '$lib/schemas/YourBusinessStepSchema';
+	import type { NewBusinessStepProps } from '$lib/types/NewBusinessStepProps';
+	import Button from '../Button.svelte';
+	import Error from '../Error.svelte';
+	import Input from '../Input.svelte';
+	import Textarea from '../Textarea.svelte';
 
-  let { data, onBack, onNext, onDataChange }: BusinessStepProps = $props()
-  const REQUIRED_FIELDS: Array<keyof Business> = ["name", "email", "phone", "description", "country", "address"]
+	let { goNext, data, setData }: Omit<NewBusinessStepProps, "goBack"> = $props();
+	let { subdata, error, setField, isFormValid } = useForm(YourBusinessStepSchema);
+
+	function onContinue() {
+		if (isFormValid()) {
+			subdata.subscribe((newData) => {
+				setData(newData);
+				goNext();
+			})();
+		}
+	}
 </script>
 
-<main class="flex flex-col items-center text-center gap-4 px-6">
-  <h1 class="text-5xl font-semibold mt-7 mb-4">
-    Tu negocio
-  </h1>
+<h1 class="my-7 text-center font-semibold mini:text-4xl mobile:text-5xl">Tu Negocio</h1>
 
-  <form class="gap-y-6 flex flex-col w-full items-center">
-    <Input value={data.name} onNewValue={(name) => onDataChange({ name })} id="business_name" name="business_name" placeholder="Nombre de tu negocio" maxlength={40} type="text" autocomplete="organization" />
-    <Input value={data.email} onNewValue={(email) => onDataChange({ email })} id="email" name="email" placeholder="Correo electrónico" maxlength={100} type="email" inputmode="email" autocomplete="email" />
-    <Input value={data.phone} onNewValue={(phone) => onDataChange({ phone })} id="phone" name="phone" placeholder="Número de teléfono" maxlength={40} type="tel" inputmode="tel" autocomplete="tel" />
-    <Textarea value={data.description} onNewValue={(description) => onDataChange({ description })} id="description" name="description" placeholder="Descripción" maxlength={255} />
-    <Input value={data.country} onNewValue={(country) => onDataChange({ country })} id="country" name="country" placeholder="País" maxlength={40} type="text" autocomplete="country-name" />
-    <Input value={data.address} onNewValue={(address) => onDataChange({ address })} id="address" name="address" placeholder="Dirección" maxlength={255} type="text" autocomplete="street-address" />
-  </form>
-</main>
-  
-<footer class="flex justify-center align-items p-6 gap-x-5">
-  <Button onclick={onBack} variant="secondary" label="Volver" />
-  <Button onclick={() => onNext(REQUIRED_FIELDS)} label="Continuar" />
-</footer>
+<form id="business-form" class="flex flex-col gap-y-4" onsubmit={onContinue}>
+	<Input
+		id="business-name"
+		name="organization"
+		placeholder="Nombre de tu negocio"
+		value={data.name}
+		maxlength={40}
+		required
+		autocomplete="organization"
+		autocapitalize="words"
+		spellcheck={false}
+		aria-label="Nombre de tu negocio"
+		onNewValue={(name) => setField('name', name)}
+	/>
+
+	<Input
+		id="email"
+		name="email"
+		placeholder="Correo electrónico"
+		value={data.email}
+		maxlength={100}
+		required
+		type="email"
+		autocomplete="email"
+		inputmode="email"
+		autocorrect="off"
+		autocapitalize="none"
+		spellcheck={false}
+		aria-label="Correo electrónico"
+		onNewValue={(email) => setField('email', email)}
+	/>
+
+	<Textarea
+		id="description"
+		name="description"
+		placeholder="Descripción"
+		required
+		minlength={10}
+		maxlength={255}
+		rows={4}
+		spellcheck="true"
+		aria-required="true"
+		onNewValue={(description) => setField('description', description)}
+	/>
+
+	<Input
+		id="phone"
+		name="tel"
+		placeholder="Número de teléfono"
+		value={data.phone}
+		maxlength={20}
+		required
+		type="tel"
+		autocomplete="tel"
+		inputmode="tel"
+		aria-label="Número de teléfono"
+		onNewValue={(phone) => setField('phone', phone)}
+	/>
+
+	<Input
+		id="country"
+		name="country"
+		placeholder="País"
+		value={data.country}
+		maxlength={40}
+		required
+		type="text"
+		autocomplete="country-name"
+		aria-label="País"
+		onNewValue={(country) => setField('country', country)}
+	/>
+
+	<Input
+		id="address"
+		name="street-address"
+		placeholder="Dirección"
+		value={data.address}
+		maxlength={255}
+		required
+		type="text"
+		autocomplete="street-address"
+		aria-label="Dirección"
+		onNewValue={(address) => setField('address', address)}
+	/>
+</form>
+
+<Error {error} />
+<Button className="w-full" form="business-form" type="submit" label="Continuar" />
