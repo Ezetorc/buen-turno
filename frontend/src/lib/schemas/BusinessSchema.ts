@@ -1,6 +1,8 @@
 import { THEMES } from '$lib/constants/THEMES';
 import type { ThemeId } from '$lib/types/ThemeId';
 import z from 'zod';
+import { DayScheduleSchema } from './DayScheduleSchema';
+import { DAYS_OF_WEEK } from '$lib/constants/DAYS_OF_WEEK';
 
 export const BusinessSchema = z.object({
 	name: z
@@ -27,7 +29,25 @@ export const BusinessSchema = z.object({
 		.string()
 		.min(10, { error: 'La dirección debe tener mínimo 10 carácteres' })
 		.max(255, { error: 'La dirección debe tener máximo 255 carácteres' }),
-	theme: z
-		.enum(Object.keys(THEMES) as [ThemeId, ...ThemeId[]])
-		.default("barber"),
+	theme: z.enum(Object.keys(THEMES) as [ThemeId, ...ThemeId[]]).default('barber'),
+	schedule: z
+		.object({
+			MONDAY: DayScheduleSchema.optional(),
+			TUESDAY: DayScheduleSchema.optional(),
+			WEDNESDAY: DayScheduleSchema.optional(),
+			THURSDAY: DayScheduleSchema.optional(),
+			FRIDAY: DayScheduleSchema.optional(),
+			SATURDAY: DayScheduleSchema.optional(),
+			SUNDAY: DayScheduleSchema.optional()
+		})
+		.superRefine((data, context) => {
+			const missingDays = DAYS_OF_WEEK.filter((day) => !data[day.id]);
+
+			if (missingDays.length > 0) {
+				context.addIssue({
+					code: 'custom',
+					message: 'Todos los días hábiles deben tener sus horarios'
+				});
+			}
+		})
 });

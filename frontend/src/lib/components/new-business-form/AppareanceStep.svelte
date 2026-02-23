@@ -10,18 +10,15 @@
 	function onSelectTheme(id: ThemeId) {
 		setData({ theme: id });
 	}
-
 </script>
 
-<h1 class="my-7 text-center font-semibold mini:text-4xl mobile:text-5xl">
-	Apariencia
-</h1>
+<h1 class="my-7 text-center font-semibold mini:text-4xl mobile:text-5xl">Apariencia</h1>
 
 <main class="space-y-6">
 	<img
-		src={data.theme? THEMES[data.theme]?.preview : undefined}
+		src={data.theme ? THEMES[data.theme]?.preview : undefined}
 		alt="Previsualización de apariencia de negocio"
-		class="w-full h-full object-cover aspect-video w-full rounded-lg bg-gray-200 flex items-center justify-center overflow-hidden"
+		class="flex aspect-video h-full w-full items-center justify-center overflow-hidden rounded-lg bg-gray-200 object-cover"
 	/>
 
 	<ul class="flex flex-col gap-y-2">
@@ -35,7 +32,7 @@
 	</ul>
 </main>
 
-<footer class="grid grid-cols-2 gap-x-6 mt-5">
+<footer class="mt-5 grid grid-cols-2 gap-x-6">
 	<Button variant="secondary" label="Volver" onclick={goBack} />
 	<Button label="Continuar" onclick={goNext} />
 </footer>

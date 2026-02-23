@@ -7,7 +7,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
-	<title>BuenTurno | Gestioná turnos de una manera eficiente</title>
+	<title>BuenTurno | Gestioná turnos de manera eficiente</title>
 </svelte:head>
 
 {@render children()}

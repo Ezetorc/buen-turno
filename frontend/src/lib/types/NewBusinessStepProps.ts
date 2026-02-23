@@ -1,8 +1,8 @@
-import type { Business } from './Business';
+import type { BusinessForm } from './BusinessForm';
 
 export type NewBusinessStepProps = {
 	goNext: () => void;
 	goBack: () => void;
-	data: Partial<Business>;
-	setData: (newData: Partial<Business>) => void;
+	data: BusinessForm;
+	setData: (newData: BusinessForm) => void;
 };

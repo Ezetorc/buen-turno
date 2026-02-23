@@ -1,25 +1,39 @@
 <script lang="ts">
 	import AppareanceStep from '$lib/components/new-business-form/AppareanceStep.svelte';
+	import ScheduleStep from '$lib/components/new-business-form/ScheduleStep.svelte';
 	import WelcomeStep from '$lib/components/new-business-form/WelcomeStep.svelte';
 	import YourBusinessStep from '$lib/components/new-business-form/YourBusinessStep.svelte';
-	import type { Business } from '$lib/types/Business';
+	import type { BusinessForm } from '$lib/types/BusinessForm';
 
-	let step: number = $state(2);
-	let data: Partial<Business> = $state({
-		theme: "barber"
+	let step: number = $state(3);
+	let data: BusinessForm = $state({
+		theme: 'barber',
+		schedule: {
+			SATURDAY: { isOpen: false },
+			SUNDAY: { isOpen: false }
+		}
 	});
 
-	function setData(newData: Partial<Business>) {
-		data = { ...data, ...newData };
+	function setData(newData: Partial<BusinessForm>) {
+		data = {
+			...data,
+			...newData,
+			schedule: newData.schedule
+				? {
+						...data.schedule,
+						...newData.schedule
+					}
+				: data.schedule
+		};
 	}
 
 	function goNext() {
-		step += 1
+		step += 1;
 	}
 
-  function goBack() {
-    step -= 1
-  }
+	function goBack() {
+		step -= 1;
+	}
 </script>
 
 <header class="sticky top-0 z-40 flex h-16 items-center border-b bg-white px-6">BuenTurno</header>
@@ -32,6 +46,8 @@
 			<YourBusinessStep {goNext} {data} {setData} />
 		{:else if step === 2}
 			<AppareanceStep {goNext} {goBack} {data} {setData} />
+		{:else if step === 3}
+			<ScheduleStep {goNext} {goBack} {data} {setData} />
 		{/if}
 	</div>
 </main>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { get } from 'svelte/store';
 	import { useForm } from '$lib/hooks/useForm';
 	import { YourBusinessStepSchema } from '$lib/schemas/YourBusinessStepSchema';
 	import type { NewBusinessStepProps } from '$lib/types/NewBusinessStepProps';
@@ -7,7 +8,7 @@
 	import Input from '../Input.svelte';
 	import Textarea from '../Textarea.svelte';
 
-	let { goNext, data, setData }: Omit<NewBusinessStepProps, "goBack"> = $props();
+	let { goNext, data, setData }: Omit<NewBusinessStepProps, 'goBack'> = $props();
 	let { subdata, error, setField, isFormValid } = useForm(YourBusinessStepSchema);
 
 	function onContinue() {
@@ -108,5 +109,5 @@
 	/>
 </form>
 
-<Error {error} />
+<Error error={get(error)} />
 <Button className="w-full" form="business-form" type="submit" label="Continuar" />
