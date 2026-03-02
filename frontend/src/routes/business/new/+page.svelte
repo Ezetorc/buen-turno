@@ -1,17 +1,31 @@
 <script lang="ts">
 	import AppareanceStep from '$lib/components/new-business-form/AppareanceStep.svelte';
 	import ScheduleStep from '$lib/components/new-business-form/ScheduleStep.svelte';
+	import ServicesStep from '$lib/components/new-business-form/ServicesStep.svelte';
 	import WelcomeStep from '$lib/components/new-business-form/WelcomeStep.svelte';
 	import YourBusinessStep from '$lib/components/new-business-form/YourBusinessStep.svelte';
+	import { ServiceColor } from '$lib/constants/SERVICE_COLOR';
 	import type { BusinessForm } from '$lib/types/BusinessForm';
 
-	let step: number = $state(3);
+	let step: number = $state(4);
 	let data: BusinessForm = $state({
 		theme: 'barber',
 		schedule: {
-			SATURDAY: { isOpen: false },
-			SUNDAY: { isOpen: false }
-		}
+			MONDAY: { isOpen: true, times: [{ start: '09:00', end: '18:00' }] },
+			TUESDAY: { isOpen: true, times: [{ start: '09:00', end: '18:00' }] },
+			WEDNESDAY: { isOpen: true, times: [{ start: '09:00', end: '18:00' }] },
+			THURSDAY: { isOpen: true, times: [{ start: '09:00', end: '18:00' }] },
+			FRIDAY: { isOpen: true, times: [{ start: '09:00', end: '18:00' }] },
+			SATURDAY: { isOpen: false, times: [{ start: '09:00', end: '18:00' }] },
+			SUNDAY: { isOpen: false, times: [{ start: '09:00', end: '18:00' }] }
+		},
+		services: [{
+			name: "",
+			description: "",
+			durationMinutes: 0,
+			price: 0,
+			color: ServiceColor.BLUE,
+		}]
 	});
 
 	function setData(newData: Partial<BusinessForm>) {
@@ -48,6 +62,8 @@
 			<AppareanceStep {goNext} {goBack} {data} {setData} />
 		{:else if step === 3}
 			<ScheduleStep {goNext} {goBack} {data} {setData} />
+		{:else if step === 4}
+			<ServicesStep {goNext} {goBack} {data} {setData} />
 		{/if}
 	</div>
 </main>

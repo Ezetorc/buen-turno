@@ -3,11 +3,10 @@
 
 	interface Props extends HTMLInputAttributes {
 		onNewValue?: (value: any) => void;
-		className?: string;
 		id: string;
 	}
 
-	let { onNewValue, className, id, ...props }: Props = $props();
+	let { onNewValue, id, ...props }: Props = $props();
 </script>
 
 <div class="relative inline-block h-8 w-11">

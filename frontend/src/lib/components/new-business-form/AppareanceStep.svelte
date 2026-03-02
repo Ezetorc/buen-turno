@@ -22,7 +22,7 @@
 	/>
 
 	<ul class="flex flex-col gap-y-2">
-		{#each getTypedEntries(THEMES) as [id, theme]}
+		{#each getTypedEntries(THEMES) as [id, theme] (id)}
 			<Button
 				onclick={() => onSelectTheme(id)}
 				variant={data.theme === id ? 'primary' : 'secondary'}

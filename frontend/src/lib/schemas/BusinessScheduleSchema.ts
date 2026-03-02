@@ -1,5 +1,5 @@
 import { BusinessSchema } from './BusinessSchema';
 
-export const BusinessScheduleStepSchema = BusinessSchema.pick({
+export const BusinessScheduleSchema = BusinessSchema.pick({
 	schedule: true
 });
